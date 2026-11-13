@@ -1,0 +1,12 @@
+{
+  "name": "jamday",
+  "version": "1.0.0",
+  "private": true,
+  "description": "JamDay – tasks, notes & calendar in one installable app for Googlebooks and Chromebooks.",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node tests/dates.test.js"
+  },
+  "license": "UNLICENSED"
+}

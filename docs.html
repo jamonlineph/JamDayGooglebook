@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Help & docs — JamDay</title>
+<meta name="description" content="How to use JamDay: tasks, habits, calendar, notes, the Quick Launcher, sync and privacy.">
+<meta property="og:title" content="Help & docs — JamDay">
+<meta property="og:description" content="How to use JamDay: tasks, habits, calendar, notes, the Quick Launcher, sync and privacy.">
+<meta property="og:image" content="site/img/today.jpg">
+<meta name="theme-color" content="#e0457b">
+<link rel="icon" href="app/icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="site/site.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="index.html"><img src="app/icons/icon.svg" alt="">JamDay</a>
+  <nav class="nav" id="nav"><a href="index.html#features">Features</a><a href="index.html#faq">FAQ</a><a href="updates.html">Updates</a><a href="index.html#pricing">Pricing</a><a href="index.html#download">Download</a></nav>
+  <button class="menu-btn" aria-label="Menu" aria-controls="nav" aria-expanded="false" onclick="var n=document.getElementById('nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))">☰</button>
+  <a class="btn btn-primary btn-sm" href="app/">Open JamDay</a>
+</div></header>
+<main>
+
+<div class="page"><div class="wrap">
+<div class="page-head"><span class="eyebrow">Help &amp; docs</span><h1>JamDay guide</h1><p class="muted">Everything you need to get the most out of JamDay.</p></div>
+<div class="doc">
+<nav class="toc" aria-label="Guides">
+  <a href="#getting-started">1. Getting started</a><a href="#tasks">2. Tasks &amp; quick tokens</a><a href="#habits">3. Habits &amp; repeating tasks</a>
+  <a href="#calendar">4. Calendar &amp; Google</a><a href="#notes">5. Notes &amp; the editor</a><a href="#organize">6. Folders, tags &amp; search</a>
+  <a href="#panel">7. Quick panel &amp; shortcuts</a><a href="#data">8. Sync, backups, AI &amp; privacy</a>
+</nav>
+<article class="prose">
+<h2 id="getting-started">1. Getting started</h2>
+<ol><li>Open <a href="app/">JamDay</a> in Chrome on your Googlebook or Chromebook.</li>
+<li>Choose <strong>Explore with demo content</strong> to look around, or <strong>Start with a clean slate</strong>.</li>
+<li>Install it: click the install icon in the address bar, or open Chrome’s menu ▸ <strong>Cast, save and share</strong> ▸ <strong>Install page as app</strong>. Pin JamDay to your shelf.</li></ol>
+<p>The short tour points out the main areas. You can start it again any time from Settings ▸ Data &amp; import, or the launcher command “Start the feature tour”.</p>
+
+<h2 id="tasks">2. Tasks &amp; quick tokens</h2>
+<p>Add tasks from the bar at the top of Inbox, Today, Upcoming, Tasks, any folder or tag, or from the Quick Launcher. Type naturally and use tokens:</p>
+<table><tr><th>Token</th><th>Meaning</th><th>Example</th></tr>
+<tr><td><code>@</code></td><td>When (date, time, span or repeat)</td><td><code>@tomorrow 3pm</code> · <code>@next fri</code> · <code>@this week</code> · <code>@someday</code> · <code>@every weekday</code></td></tr>
+<tr><td><code>#</code></td><td>Tag (created if new)</td><td><code>#errand</code> · <code>#"deep work"</code></td></tr>
+<tr><td><code>&amp;</code></td><td>Folder (created if new)</td><td><code>&amp;Work</code></td></tr>
+<tr><td><code>!</code></td><td>Priority</td><td><code>!</code> medium · <code>!!</code> high · <code>!!!</code> urgent · <code>!low</code></td></tr>
+<tr><td><code>+</code></td><td>Person</td><td><code>+Ana</code></td></tr></table>
+<p>Open a task to set its status (To do, In progress, Waiting, Done), <strong>When</strong> (a day, a week, a month or Someday), a separate <strong>Deadline</strong>, a reminder, priority, folder, tags, people, subtasks, rich notes, links and attachments (up to 100&nbsp;MB each, previewed with Quick Look).</p>
+<p><strong>Views:</strong> Inbox collects anything without a date or folder. Today shows overdue items, today’s tasks and events, and things planned for this week. Upcoming lists the next two weeks day by day, then the loose plans. Tasks offers list, Kanban board and calendar views with filters and grouping. Drag tasks onto days, folders or sidebar items to reschedule or file them.</p>
+
+<h2 id="habits">3. Habits &amp; repeating tasks</h2>
+<p>Any task can repeat: open it and choose <strong>Repeat</strong>, or type <code>@every mon, wed and fri</code>. Repeating tasks are habits. Completing one logs the day and moves it to the next occurrence. A streak counts how many scheduled occurrences in a row you completed; finishing early still counts.</p>
+<p>The Habits page shows the last 7 days for every habit: click any day to log or un-log it. The 🔥 flame appears in Today, Upcoming and the calendar.</p>
+
+<h2 id="calendar">4. Calendar &amp; Google Calendar</h2>
+<p>Switch between Day, 2D, 3D, 4D, Week and Month (keys <code>d</code>, <code>2</code>–<code>4</code>, <code>w</code>, <code>m</code>; arrows to move, <code>.</code> for today). Drag on the grid to create an event, drag an event to move it, and drag its bottom edge to resize. Events can have a location, a meeting link with a <strong>Join</strong> button, a colour, a reminder, notes, linked tasks and notes, attachments, a folder and tags.</p>
+<h3>Connect Google Calendar</h3>
+<ol><li>In <a href="https://console.cloud.google.com/apis/credentials">Google Cloud Console</a>, create a project and enable the <strong>Google Calendar API</strong> (and the <strong>Google Drive API</strong> for sync).</li>
+<li>Configure the OAuth consent screen and add yourself as a test user.</li>
+<li>Create an <strong>OAuth client ID</strong> of type <em>Web application</em>, and add the address where JamDay runs as an authorized JavaScript origin.</li>
+<li>Paste the client ID in Settings ▸ Integrations &amp; sync and press <strong>Connect</strong>.</li></ol>
+<p>JamDay reads about two weeks back and three months ahead from the calendars you pick. Google events are held in memory only and never saved to the device. With <strong>two-way sync</strong> on, events you create in JamDay can be sent to Google (and given a Google Meet link); JamDay only ever edits or deletes events it created. Other calendars, such as Outlook, can be imported from an <code>.ics</code> file.</p>
+
+<h2 id="notes">5. Notes &amp; the editor</h2>
+<p>Notes use blocks. Type <code>/</code> anywhere — at the start of a line or mid-line — for headings, lists, to-dos, quotes, callouts, code, dividers, images, tables, tasks, subtasks, events, sub-notes and today’s date. Markdown shortcuts work too: <code>#</code>, <code>##</code>, <code>-</code>, <code>1.</code>, <code>[]</code>, <code>&gt;</code>, <code>```</code> and <code>---</code>.</p>
+<p>Type <code>@</code> to mention a task, event or note; mentions become links, and the item shows the note under “Linked &amp; mentioned in”. Select text to format it, add a link, or rewrite and summarize it with AI. Drag the ⋮⋮ handle to reorder blocks, or click it to turn a block into another type.</p>
+<p>Give notes an icon (emoji or uploaded image) and a cover from the artwork gallery or your own picture. Pin notes to the top, export them as Markdown, and import Markdown or PDF files.</p>
+
+<h2 id="organize">6. Folders, tags &amp; search</h2>
+<p>Folders hold tasks, notes and events together. A folder page shows cards or a list, with filters by type and grouping by type, date or tag. Tags cut across folders; each tag has its own page, colour and optional icon. Both appear in the sidebar, where you can drop tasks onto them.</p>
+<p>The <strong>Quick Launcher</strong> (<code>Alt+Space</code> or <code>Ctrl+K</code>) searches everything. Type to create a task, event or note in one line; use <code>#</code>, <code>&amp;</code> and <code>@</code> to filter; type <code>&gt;</code> for commands; and press <code>Tab</code> on a result for quick actions such as complete, reschedule, move or delete.</p>
+
+<h2 id="panel">7. Quick panel &amp; shortcuts</h2>
+<p>The quick panel (<code>Ctrl+Alt+Space</code>, or the panel button at the top right) has tabs for Today, Calendar, Tasks, Events and Notes. Use its menu to show it as a dropdown, a floating window you can drag, or docked full height on the left or right. You can also make it open when the pointer touches the edge of the window.</p>
+<table><tr><th>Action</th><th>Shortcut</th></tr>
+<tr><td>Quick Launcher</td><td><code>Alt+Space</code> / <code>Ctrl+K</code></td></tr><tr><td>Quick panel</td><td><code>Ctrl+Alt+Space</code></td></tr>
+<tr><td>New task / note / event</td><td><code>t</code> / <code>n</code> / <code>e</code></td></tr><tr><td>Go to Today / Inbox / Upcoming / Calendar / Notes / Habits</td><td><code>g</code> then <code>t</code> / <code>i</code> / <code>u</code> / <code>c</code> / <code>n</code> / <code>h</code></td></tr>
+<tr><td>Toggle sidebar</td><td><code>[</code></td></tr><tr><td>All shortcuts</td><td><code>?</code></td></tr></table>
+<p>Change the launcher and panel shortcuts in Settings ▸ Shortcuts &amp; panel.</p>
+
+<h2 id="data">8. Sync, backups, AI &amp; privacy</h2>
+<p><strong>Your data</strong> lives in a local database in your browser profile on this device. Export a full backup (.json), your tasks (.csv) or all notes (.md) from Settings ▸ Data &amp; import, where you can also import backups, CSV and Excel files (for example from Todoist or Linear), Markdown, PDF and .ics files.</p>
+<p><strong>Sync</strong> is optional: turn on Google Drive sync to keep devices in step through one private file in Drive’s app-data folder. Attachments stay on the device where you added them.</p>
+<p><strong>Reminders</strong> are local notifications, shown while JamDay is open. Install it and keep it on your shelf for the most reliable alerts.</p>
+<p><strong>AI:</strong> rewrite and summarize run on-device with Chrome’s built-in AI where your device supports it. The assistant is optional and off by default. It uses your own Claude, ChatGPT, Gemini or Grok API key, runs only when you send a message, and shows every change for you to confirm. Choose what it can see (tasks, calendar, notes) from the composer.</p>
+<p>Read the full <a href="privacy.html">privacy policy</a>.</p>
+</article></div></div></div>
+
+</main>
+<footer><div class="wrap">
+  <div class="foot">
+    <div><a class="brand" href="index.html"><img src="app/icons/icon.svg" alt="">JamDay</a>
+      <p class="muted" style="margin-top:12px;max-width:340px">Tasks, notes &amp; calendar in one private app for your Googlebook. No account, no tracking.</p></div>
+    <nav aria-label="Product"><h4>JamDay</h4><a href="index.html">Home</a><a href="docs.html">Docs</a><a href="contact.html">Contact</a><a href="docs.html">Help &amp; docs</a></nav>
+    <nav aria-label="Company"><h4>More</h4><a href="roadmap.html">Share feedback</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of service</a><a href="contact.html#purchases">Customer portal</a></nav>
+  </div>
+  <div class="copy">© 2026 JamDay. Made for Googlebooks and Chromebooks — works anywhere Chrome does.</div>
+</div></footer>
+<script src="site/site.js" defer></script>
+</body>
+</html>
