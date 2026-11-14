@@ -78,7 +78,7 @@ final class Notifier {
         }
         String text = body == null ? "" : body;
         b.setSmallIcon(R.drawable.ic_notify)
-                .setColor(0xFFE0457B)
+                .setColor(0xFFBC243C)
                 .setContentTitle(title == null || title.length() == 0 ? "JamDay" : title)
                 .setContentText(text)
                 .setStyle(new Notification.BigTextStyle().bigText(text))

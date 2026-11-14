@@ -14,7 +14,7 @@ import { loadDemo } from '../demo.js';
 import { startTour } from './tour.js';
 
 export const ACCENTS = {
-  jam: { name: 'Jam', c: '#e0457b' }, blueberry: { name: 'Blueberry', c: '#4f6bed' }, mint: { name: 'Mint', c: '#15a37f' },
+  jam: { name: 'Crimson', c: '#bc243c' }, blueberry: { name: 'Blueberry', c: '#4f6bed' }, mint: { name: 'Mint', c: '#15a37f' },
   citrus: { name: 'Citrus', c: '#ec7a12' }, grape: { name: 'Grape', c: '#8a4fd6' }, graphite: { name: 'Graphite', c: '#5b6470' },
 };
 export const GLASS = { '': 'None', aurora: 'Aurora', sunset: 'Sunset', midnight: 'Midnight', meadow: 'Meadow' };

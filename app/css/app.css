@@ -1,7 +1,7 @@
 /* JamDay — app styles. Light, dark and glass themes; comfortable/compact density. */
 
 :root {
-  --accent: #e0457b;
+  --accent: #bc243c;
   --font-scale: 1;
   --font: system-ui, 'Roboto', -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --mono: ui-monospace, 'Roboto Mono', 'SFMono-Regular', Menlo, Consolas, monospace;

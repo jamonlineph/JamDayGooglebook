@@ -1,7 +1,7 @@
 /* JamDay website */
 :root {
-  --accent: #e0457b;
-  --accent-2: #ff8a5b;
+  --accent: #bc243c;
+  --accent-2: #e8603c;
   --accent-soft: color-mix(in srgb, var(--accent) 12%, transparent);
   --bg: #fbf9f7;
   --bg-2: #f3efea;

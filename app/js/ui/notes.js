@@ -13,7 +13,7 @@ import { Attachments } from './attachments.js';
 import { exportNoteMarkdown } from '../io.js';
 
 export const COVERS = [
-  { id: 'jam', name: 'Jam', css: 'linear-gradient(120deg,#ff5f8f 0%,#ff9a8b 55%,#ffc3a0 100%)' },
+  { id: 'jam', name: 'JamDay', css: 'linear-gradient(120deg,#8f1a2e 0%,#bc243c 45%,#e8603c 100%)' },
   { id: 'berry', name: 'Berry', css: 'linear-gradient(135deg,#6a11cb 0%,#d6409f 100%)' },
   { id: 'citrus', name: 'Citrus', css: 'linear-gradient(135deg,#f6d365 0%,#fda085 100%)' },
   { id: 'mint', name: 'Mint', css: 'linear-gradient(135deg,#84fab0 0%,#8fd3f4 100%)' },
