@@ -1,5 +1,5 @@
 // App shell: sidebar, routing, detail drawer, overlays, global shortcuts, theme.
-import { html, useState, useEffect, useLayoutEffect, useRef, cx, isEditableTarget } from '../lib.js';
+import { html, useState, useEffect, useLayoutEffect, useRef, cx, isEditableTarget, android } from '../lib.js';
 import {
   S, emit, subscribe, setSetting, navigate, SECTIONS, folders, tags, tasks, isInbox, isTodayTask, isOverdue, isDone, taskDate,
   findEvent, closeDetail, closePopover, closeTopModal, create, openItem, setUI, update, toast, emptyTrash, notes, itemsInFolder,
@@ -36,6 +36,8 @@ export function applyTheme() {
   root.style.setProperty('--font-scale', s.fontScale || 1);
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.content = dark ? '#17151a' : '#faf8f6';
+  const bridge = android();
+  if (bridge) { try { bridge.setSystemBars(dark ? '#17151a' : '#faf8f6', dark); } catch { /* older shell */ } }
 }
 mq.addEventListener('change', applyTheme);
 
@@ -170,6 +172,20 @@ function comboMatches(e, combo) {
   return k === key || (key === 'space' && e.code === 'Space') || (key === '.' && e.code === 'Period');
 }
 
+/** Closes the top-most overlay. Returns true if something was closed (used by Esc and Android's back button). */
+export function closeTopLayer() {
+  if (S.ui.tour) { S.ui.tour = null; emit(); return true; }
+  if (S.ui.shortcutsHelp) { setUI({ shortcutsHelp: false }); return true; }
+  if (S.overlay.popover) { closePopover(); return true; }
+  if (closeTopModal()) return true;
+  if (S.ui.launcher) { closeLauncher(); return true; }
+  if (S.ui.panel) { togglePanel(false); return true; }
+  if (S.ui.detail) { closeDetail(); return true; }
+  if (S.ui.sidebarOpen) { setUI({ sidebarOpen: false }); return true; }
+  return false;
+}
+if (typeof window !== 'undefined') window.jamdayBack = closeTopLayer;
+
 let gPending = 0;
 function onGlobalKey(e) {
   if (e.defaultPrevented) return;
@@ -181,13 +197,7 @@ function onGlobalKey(e) {
   }
   if (comboMatches(e, s.shortcuts.panel)) { e.preventDefault(); togglePanel(); return; }
   if (e.key === 'Escape') {
-    if (S.ui.shortcutsHelp) { setUI({ shortcutsHelp: false }); return; }
-    if (S.overlay.popover) { closePopover(); return; }
-    if (closeTopModal()) return;
-    if (S.ui.launcher) { closeLauncher(); return; }
-    if (S.ui.panel) { togglePanel(false); return; }
-    if (S.ui.detail) { closeDetail(); return; }
-    if (S.ui.sidebarOpen) { setUI({ sidebarOpen: false }); return; }
+    if (!S.ui.tour) closeTopLayer();
     return;
   }
   if (isEditableTarget(e.target) || e.ctrlKey || e.metaKey || e.altKey || S.ui.launcher || S.overlay.modals.length || S.overlay.popover || S.ui.tour) return;

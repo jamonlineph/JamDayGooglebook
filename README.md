@@ -34,6 +34,40 @@ The files also work as-is on any static host, such as Netlify, Cloudflare Pages 
 
 **When you ship an app update:** change `VERSION` in `app/sw.js`. Installed copies then fetch the new files and switch to them the next time they open.
 
+## Android app (APK)
+
+`android/` wraps the same web app in a small native Android shell, so JamDay can be installed as a regular app on Android phones, tablets and Googlebooks.
+
+```bash
+npm run build:apk        # → dist/jamday-<version>.apk
+VERSION_CODE=2 npm run build:apk   # bump this number for every update you ship
+```
+
+The build script uses the official Android SDK when `ANDROID_HOME` is set. Without it, it uses Ubuntu's packages:
+
+```bash
+sudo apt-get install openjdk-21-jdk android-sdk-platform-23 aapt dalvik-exchange zipalign apksigner zip
+```
+
+- **What the shell adds:**
+  - The web app is bundled in the APK and served from `https://appassets.androidplatform.net/`, so it works fully offline.
+  - Reminders are scheduled with Android's alarm service, so they fire even when the app is closed.
+  - Exports open Android's "Save to…" dialog, and file pickers work.
+  - The back button closes dialogs and panels first.
+  - Links open in the right app, and the status bar follows the theme.
+- **Signing:**
+  - The first build creates a key in `android/keystore/`. The key is git-ignored, so keep a copy somewhere safe.
+  - Android only installs an update over an existing install when it's signed with the same key. Uninstalling the app deletes its data.
+  - To use your own key, set `KEYSTORE`, `KEYSTORE_PASS` and `KEY_ALIAS`.
+- **Installing:**
+  - On a phone or tablet, open the APK and allow "Install unknown apps" when asked.
+  - On a Chromebook or Googlebook, apps normally come from the Play Store. Sideloading an APK needs developer mode or ADB.
+  - The Play Store expects an Android App Bundle (`.aab`) signed with an upload key. That isn't part of this script yet.
+- **Not available in the Android app:**
+  - The Google Calendar and Drive connection. Google blocks its sign-in page inside embedded web views.
+  - Use JamDay in Chrome for Google features, or move data between devices with backups.
+- **Reminders and restarts:** scheduled reminders are cleared when the device restarts, and they're set up again the next time JamDay opens.
+
 ## Things to fill in before launch
 
 | What | Where |

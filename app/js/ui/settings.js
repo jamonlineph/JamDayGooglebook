@@ -1,5 +1,5 @@
 // Settings: general, appearance, sidebar, notifications, shortcuts & panel, integrations, AI, data, about.
-import { html, useState, useEffect, cx, pickFiles, fmtBytes, APP_VERSION } from '../lib.js';
+import { html, useState, useEffect, cx, pickFiles, fmtBytes, APP_VERSION, android } from '../lib.js';
 import {
   S, emit, setSetting, navigate, SECTIONS, toast, wipeEverything, resetSettings, tasks, notes, events, folders, tags, trashed,
 } from '../store.js';
@@ -9,7 +9,7 @@ import { Btn, ViewHeader, Segmented, Switch, Kbd, confirmDialog, shortcutLabel }
 import * as AI from '../ai.js';
 import * as G from '../google.js';
 import * as IO from '../io.js';
-import { requestPermission, notificationsSupported, show } from '../notify.js';
+import { requestPermission, permissionState, show } from '../notify.js';
 import { loadDemo } from '../demo.js';
 import { startTour } from './tour.js';
 
@@ -73,16 +73,16 @@ function SidebarSettings() {
 
 function Notifications() {
   const n = S.settings.notifications;
-  const perm = notificationsSupported() ? Notification.permission : 'unsupported';
+  const perm = permissionState();
   const set = (k, v) => setSetting('notifications.' + k, v);
   return html`
-    <${Row} label="Reminders & notifications" hint="Local notifications fire while JamDay is open — install it and keep it in your shelf for the best results.">
+    <${Row} label="Reminders & notifications" hint=${android() ? 'Reminders fire even when JamDay is closed. Android may deliver them a few minutes late to save battery.' : 'Local notifications fire while JamDay is open — install it and keep it in your shelf for the best results.'}>
       <input type="checkbox" class="switch" checked=${n.enabled} onChange=${async (e) => {
         const on = e.target.checked;
         set('enabled', on);
         if (on && perm === 'default') { const p = await requestPermission(); emit(); if (p !== 'granted') toast('System notifications are blocked — JamDay will show in-app alerts instead.'); }
       }} /><//>
-    ${perm === 'denied' && html`<div class="banner warn"><${Icon} name="info" size=${15} /> Notifications are blocked for this site. Allow them in your browser’s site settings to get system alerts.</div>`}
+    ${perm === 'denied' && html`<div class="banner warn"><${Icon} name="info" size=${15} /> ${android() ? 'Notifications are turned off for JamDay. Turn them on in Android Settings ▸ Apps ▸ JamDay ▸ Notifications.' : 'Notifications are blocked for this site. Allow them in your browser’s site settings to get system alerts.'}</div>`}
     <div class=${cx(!n.enabled && 'disabled-block')}>
       <${Row} label="Task reminders"><input type="checkbox" class="switch" checked=${n.tasks} onChange=${(e) => set('tasks', e.target.checked)} /><//>
       <${Row} label="Event alerts"><input type="checkbox" class="switch" checked=${n.events} onChange=${(e) => set('events', e.target.checked)} /><//>
@@ -125,6 +125,15 @@ function Integrations() {
   const g = S.settings.google;
   const [busy, setBusy] = useState(false);
   const run = async (fn) => { setBusy(true); try { await fn(); } catch (e) { toast(e.message, { kind: 'error', timeout: 8000 }); } setBusy(false); };
+  if (android()) return html`
+    <div class="int-card">
+      <div class="int-h"><span class="int-logo g"><${Icon} name="calendar" size=${18} /></span><div><b>Google Calendar & Drive sync</b><div class="muted small">Not available in the Android app yet</div></div></div>
+      <p class="muted small">Google doesn’t allow its sign-in page inside apps that embed a web view, so the Google connection only works when you use JamDay in Chrome. To move data between devices, export a backup in Settings ▸ Data & import and import it on the other device.</p>
+    </div>
+    <div class="int-card">
+      <div class="int-h"><span class="int-logo"><${Icon} name="upload" size=${18} /></span><div><b>Bring your stuff</b><div class="muted small">Calendar files (.ics), Todoist / Linear / spreadsheet exports (CSV or Excel), Markdown, PDFs and JamDay backups</div></div></div>
+      <${Btn} icon="upload" label="Import files…" onClick=${() => importFlow()} />
+    </div>`;
   return html`
     <div class="int-card">
       <div class="int-h"><span class="int-logo g"><${Icon} name="calendar" size=${18} /></span><div><b>Google Calendar</b><div class="muted small">Optional · reads ~2 weeks back and 3 months ahead · events stay in memory only</div></div>
@@ -249,13 +258,13 @@ function About() {
   const [upd, setUpd] = useState('');
   return html`
     <div class="about-hero"><span class="logo-big"><${Icon} name="logo" size=${46} /></span><div><h2>JamDay</h2><span class="muted">Tasks, notes & calendar · version ${APP_VERSION}</span></div></div>
-    ${S.ui.installPrompt ? html`<${Btn} kind="primary" icon="download" label="Install JamDay on this device" onClick=${async () => { S.ui.installPrompt.prompt(); await S.ui.installPrompt.userChoice; S.ui.installPrompt = null; emit(); }} />`
+    ${android() ? html`<p class="muted small">You’re using the JamDay Android app. Updates arrive as new versions of the app.</p>` : S.ui.installPrompt ? html`<${Btn} kind="primary" icon="download" label="Install JamDay on this device" onClick=${async () => { S.ui.installPrompt.prompt(); await S.ui.installPrompt.userChoice; S.ui.installPrompt = null; emit(); }} />`
       : html`<p class="muted small">${matchMedia('(display-mode: standalone)').matches ? 'Installed ✓ — JamDay runs in its own window and works offline.' : 'To install: open Chrome’s menu ▸ Cast, save and share ▸ Install page as app (or the install icon in the address bar).'}</p>`}
-    <div class="row"><${Btn} icon="refresh" label="Check for updates" onClick=${async () => {
+    ${!android() && html`<div class="row"><${Btn} icon="refresh" label="Check for updates" onClick=${async () => {
       const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration();
       if (!reg) { setUpd('Updates are checked automatically when JamDay is installed.'); return; }
       await reg.update(); setUpd(reg.waiting || reg.installing ? 'An update is ready — it applies the next time you open JamDay.' : 'You’re on the latest version.');
-    }} /><span class="muted small">${upd}</span></div>
+    }} /><span class="muted small">${upd}</span></div>`}
     <h4 class="set-sub">Privacy</h4>
     <ul class="privacy-list">
       <li><${Icon} name="lock" size=${15} /> No account. Everything is stored in a local database on this device.</li>

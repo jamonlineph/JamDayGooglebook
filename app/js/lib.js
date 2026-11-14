@@ -40,8 +40,19 @@ export function stripHtml(s = '') {
   return (_tmp.textContent || '').replace(/\s+/g, ' ').trim();
 }
 
+/** The Android app shell exposes window.JamDayAndroid; null in a normal browser. */
+export const android = () => (typeof window !== 'undefined' && window.JamDayAndroid) || null;
+
 export function download(filename, data, type = 'application/octet-stream') {
   const blob = data instanceof Blob ? data : new Blob([data], { type });
+  const bridge = android();
+  if (bridge) {
+    // WebView can't save blob: links, so hand the bytes to the native "Save to…" dialog.
+    const r = new FileReader();
+    r.onload = () => bridge.saveFile(filename, blob.type || type, String(r.result).split(',')[1] || '');
+    r.readAsDataURL(blob);
+    return;
+  }
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = filename;

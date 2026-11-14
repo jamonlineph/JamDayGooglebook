@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "python3 -m http.server 8080",
-    "test": "node tests/dates.test.js"
+    "test": "node tests/dates.test.js",
+    "build:apk": "bash android/build-apk.sh"
   },
   "license": "UNLICENSED"
 }

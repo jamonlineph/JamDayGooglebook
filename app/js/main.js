@@ -1,5 +1,5 @@
 // Boot: load data, render, register the service worker, wire install + notification clicks.
-import { html, render } from './lib.js';
+import { html, render, android } from './lib.js';
 import { S, boot, emit, openItem, toast } from './store.js';
 import { App, applyTheme } from './ui/app.js';
 import { startScheduler } from './notify.js';
@@ -20,7 +20,11 @@ addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); S.ui.instal
 addEventListener('appinstalled', () => { S.ui.installPrompt = null; emit(); toast('JamDay is installed — find it in your launcher and shelf.'); });
 
 // Offline support + notification clicks
-if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+// Inside the Android app, files ship with the APK, so no service worker is needed.
+if (android()) {
+  document.documentElement.dataset.platform = 'android';
+  window.jamdayOpen = (id) => { if (id) openItem(id); };
+} else if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   navigator.serviceWorker.register('./sw.js').catch((e) => console.warn('Service worker not registered', e));
   navigator.serviceWorker.addEventListener('message', (ev) => {
     if (ev.data && ev.data.type === 'open' && ev.data.id) openItem(ev.data.id);
