@@ -65,8 +65,11 @@ export function MCPView() {
   const toggle = (on) => { setSetting('mcp.enabled', on); setTimeout(on ? startMCP : stopMCP, 0); };
   const getConnector = async () => {
     try {
-      const res = await fetch(new URL('../mcp/jamday-mcp.mjs', location.href));
-      download('jamday-mcp.mjs', await res.text(), 'text/javascript');
+      const res = await fetch(new URL('mcp/jamday-mcp.mjs', location.href.split('#')[0]));
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const code = await res.text();
+      if (!code.includes('JamDay MCP connector')) throw new Error('unexpected file');
+      download('jamday-mcp.mjs', code, 'text/javascript');
     } catch (e) { toast('Couldn’t get the connector: ' + e.message, { kind: 'error' }); }
   };
   return html`<div class="view">

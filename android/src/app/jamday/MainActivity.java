@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
         if ((getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0) WebView.setWebContentsDebuggingEnabled(true);
 
         web = new WebView(this);
-        web.setBackgroundColor(isNight() ? 0xFF17151A : 0xFFFAF8F6);
+        web.setBackgroundColor(isNight() ? 0xFF151214 : 0xFFFAF7F6);
         web.setOverScrollMode(View.OVER_SCROLL_NEVER);
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
@@ -129,6 +129,7 @@ public class MainActivity extends Activity {
         if (p.endsWith(".jpg") || p.endsWith(".jpeg")) return "image/jpeg";
         if (p.endsWith(".webmanifest")) return "application/manifest+json";
         if (p.endsWith(".json")) return "application/json";
+        if (p.endsWith(".woff2")) return "font/woff2";
         if (p.endsWith(".txt") || p.endsWith(".md")) return "text/plain";
         return "application/octet-stream";
     }

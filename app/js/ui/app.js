@@ -35,9 +35,9 @@ export function applyTheme() {
   root.style.setProperty('--accent', (ACCENTS[s.accent] || ACCENTS.jam).c);
   root.style.setProperty('--font-scale', s.fontScale || 1);
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.content = dark ? '#17151a' : '#faf8f6';
+  if (meta) meta.content = dark ? '#151214' : '#faf7f6';
   const bridge = android();
-  if (bridge) { try { bridge.setSystemBars(dark ? '#17151a' : '#faf8f6', dark); } catch { /* older shell */ } }
+  if (bridge) { try { bridge.setSystemBars(dark ? '#151214' : '#faf7f6', dark); } catch { /* older shell */ } }
 }
 mq.addEventListener('change', applyTheme);
 

@@ -17,7 +17,7 @@ A="$ROOT/android"
 OUT="$A/build"
 DIST="$ROOT/dist"
 VERSION="$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' "$ROOT/package.json" | head -1)"
-VERSION_CODE="${VERSION_CODE:-1}"
+VERSION_CODE="${VERSION_CODE:-$(sed -n 's/.*android:versionCode="\([0-9]*\)".*/\1/p' "$A/AndroidManifest.xml" | head -1)}"
 
 say() { printf '\033[1;35m▸ %s\033[0m\n' "$*"; }
 die() { printf '\033[1;31m✗ %s\033[0m\n' "$*" >&2; exit 1; }

@@ -1047,3 +1047,4 @@ code.token { font-size: 0.85rem; }
   .day-hero { padding: 16px; gap: 14px; }
   .ring { width: 58px; height: 58px; }
 }
+.row.wrap > .input { flex: 1 1 220px; }

@@ -40,7 +40,7 @@ The files also work as-is on any static host, such as Netlify, Cloudflare Pages 
 
 ```bash
 npm run build:apk        # → dist/jamday-<version>.apk
-VERSION_CODE=2 npm run build:apk   # bump this number for every update you ship
+# bump android:versionCode in android/AndroidManifest.xml for every update you ship
 ```
 
 The build script uses the official Android SDK when `ANDROID_HOME` is set. Without it, it uses Ubuntu's packages:
@@ -66,6 +66,7 @@ sudo apt-get install openjdk-21-jdk android-sdk-platform-23 aapt dalvik-exchange
 - **Not available in the Android app:**
   - The Google Calendar and Drive connection. Google blocks its sign-in page inside embedded web views.
   - Use JamDay in Chrome for Google features, or move data between devices with backups.
+- **MCP in the Android app:** the app connects to `ws://127.0.0.1:41823` on the same device. This works when the JamDay connector and your AI app run on that device, for example in Termux. On a Chromebook, Android apps have a separate localhost from the Linux environment, so use JamDay in Chrome for MCP there.
 - **Reminders and restarts:** scheduled reminders are cleared when the device restarts, and they're set up again the next time JamDay opens.
 
 ## Things to fill in before launch
@@ -128,11 +129,23 @@ This takes the place of a Mac menu-bar panel.
 - Three styles: a dropdown, a draggable floating window, or docked full-height on the left or right edge.
 - Opens with **Ctrl+Alt+Space**, and can optionally open when the pointer touches the edge of the window.
 
-### AI assistant (optional, off by default)
-- You use your own key for **Claude, ChatGPT, Gemini or Grok**.
-- **Auto AI** picks a fast or a capable model for each message.
-- You choose whether it can see your tasks, calendar and notes.
-- It proposes changes, such as creating or editing tasks, events and notes, and you confirm each one.
+### MCP — connect AI apps (optional, off by default)
+AI apps that support the Model Context Protocol, such as Claude Desktop, Claude Code, Cursor and VS Code, can work with JamDay.
+
+- **How it connects:** the AI app starts the **JamDay connector** (`app/mcp/jamday-mcp.mjs`). It's a single Node.js 18+ file with no dependencies. The connector relays tool calls over a local WebSocket (`ws://127.0.0.1:41823`, protected by a token) to the JamDay app, which must be open.
+- **16 tools:**
+  - Read: today's overview, search, and lists of tasks, events, notes, habits, folders and tags.
+  - Change: create, update and complete tasks; create and update events and notes; move items to Trash.
+- **You stay in control:**
+  - Choose read-only or read & write.
+  - Every change shows a notice with **Undo**. Rapid changes share one notice with "Undo all".
+  - An activity log lists every request.
+- **Setup:** open **MCP** in the sidebar, turn on "Allow MCP clients" and download the connector. Then copy the snippet for your AI app, which already includes your token. For Claude Code it's one command:
+  ```bash
+  claude mcp add jamday --env JAMDAY_TOKEN=<token> -- node /path/to/jamday-mcp.mjs
+  ```
+- **ChromeOS with the AI app in Linux:** turn on port forwarding for port 41823 under Settings ▸ About ChromeOS ▸ Developers ▸ Linux ▸ Port forwarding.
+- **Tests:** `npm test` covers the connector's MCP handshake, relay and token check.
 
 ### Integrations & import
 - **Google Drive app-data sync** across devices.
@@ -157,7 +170,7 @@ This takes the place of a Mac menu-bar panel.
 - The app only uses the network for:
   - loading app updates
   - the optional Google connection
-  - the optional AI assistant
+  - the optional MCP connection, which only goes to the connector on the same device
   - on-demand import helpers (the Excel and PDF readers come from cdnjs)
 
 ## How the original Mac app's design maps to a Googlebook
@@ -171,7 +184,7 @@ This takes the place of a Mac menu-bar panel.
 | Apple Intelligence (on-device AI) | Chrome built-in AI (Gemini Nano), where the device supports it |
 | Sparkle auto-updates | Service-worker updates |
 | Apple Reminders / Notes / Todoist / Linear sync | CSV / Excel / Markdown import (Apple's apps aren't on ChromeOS) |
-| Local MCP server | Not possible inside a browser app (would need a native helper) |
+| Built-in local MCP server | JamDay MCP connector: a small local Node.js helper that the AI app starts, which talks to the open app |
 | Polar license keys | Not built. Pricing copy and a checkout link placeholder are in place. |
 
 ## Code map
@@ -181,7 +194,7 @@ app/
   index.html, manifest.webmanifest, sw.js, icons/, css/app.css
   vendor/            Preact + htm (MIT), vendored, no build step
   js/
-    main.js          boot, install prompt, service worker
+    main.js          boot, install prompt, service worker, MCP start
     store.js         state, IndexedDB persistence, queries, actions, undo
     db.js            IndexedDB wrapper
     dates.js         plain-language parser, repeat rules, habit streaks
@@ -190,11 +203,15 @@ app/
     notify.js        local reminders
     io.js            import / export
     google.js        Google Calendar + Drive (Google Identity Services)
-    ai.js            AI providers + Chrome built-in AI
+    ai.js            Chrome built-in AI (on-device rewrite / summarize)
+    mcp.js           MCP client: connects to the connector and runs tool calls
     demo.js          demo content
     ui/              app shell, views (tasks, calendar, notes, collections),
-                     block editor, launcher, quick panel, assistant, settings, tour
-tests/dates.test.js
+                     block editor, launcher, quick panel, MCP page, settings, tour
+  mcp/jamday-mcp.mjs the JamDay MCP connector (stdio MCP server, zero dependencies)
+  fonts/             Inter variable font (OFL)
+android/             native Android shell + build-apk.sh
+tests/               unit tests (dates, quick tokens, MCP connector)
 ```
 
 Known limits:
