@@ -4,7 +4,7 @@
 import {
   S, emit, setSetting, tasks, notes, allEvents, folders, tags, alive, create, update, trash, toggleTask, isDone,
   taskDate, isOverdue, isTodayTask, isInbox, sortTasks, subtasks, liveTags, folderOf, titleOf, itemText,
-  findOrCreateTag, findOrCreateFolder, findFolder, eventsOn, eventDays, snapshot, restoreSnapshot, toast, PRIORITIES,
+  findOrCreateTag, findOrCreateFolder, findFolder, eventsOn, eventDays, snapshot, restoreSnapshot, toast, dismissToast, PRIORITIES,
   itemsInFolder, itemsWithTag,
 } from './store.js';
 import { fuzzy, APP_VERSION } from './lib.js';
@@ -122,15 +122,20 @@ function summarize(name, a) {
   return '';
 }
 
-/** Applies a change, then shows a notice with Undo (unless the user turned notices off). */
+/** Applies a change, then shows one notice with Undo. Changes in quick succession share a notice. */
+let batch = null;
 function change(message, ids, fn) {
   const snap = snapshot(ids);
   const r = fn();
   // Undoing a create removes the new item again
   if (r && r.id && !ids.includes(r.id)) snap.push({ id: r.id, __missing: true });
-  if (S.settings.mcp.notify) {
-    toast('🔌 ' + message, { timeout: 7000, action: { label: 'Undo', run: () => restoreSnapshot(snap) } });
-  }
+  if (!S.settings.mcp.notify) return r;
+  if (batch && Date.now() - batch.at < 8000) { dismissToast(batch.toast); batch.snaps.push(snap); batch.count++; }
+  else batch = { snaps: [snap], count: 1 };
+  batch.at = Date.now();
+  const b = batch;
+  const text = b.count > 1 ? `An AI app made ${b.count} changes — latest: ${message.replace(/^An AI app /, '')}` : message;
+  b.toast = toast('🔌 ' + text, { timeout: 8000, action: { label: b.count > 1 ? 'Undo all' : 'Undo', run: () => { b.snaps.slice().reverse().forEach(restoreSnapshot); if (batch === b) batch = null; } } });
   return r;
 }
 

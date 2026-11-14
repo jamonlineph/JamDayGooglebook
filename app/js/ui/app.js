@@ -77,7 +77,7 @@ registerCommands(() => {
 /* Sidebar                                                              */
 /* ------------------------------------------------------------------ */
 
-function NavItem({ id, icon, label, count, danger, active, onDrop, color, children, onContext }) {
+function NavItem({ id, icon, label, count, danger, active, onDrop, color, children, onContext, dot }) {
   const [over, setOver] = useState(false);
   return html`<a href=${'#/' + id} data-nav=${id.split('/')[0]} class=${cx('nav-i', active && 'on', over && 'drop')} onClick=${() => setUI({ sidebarOpen: false })}
       onContextMenu=${onContext}
@@ -86,6 +86,7 @@ function NavItem({ id, icon, label, count, danger, active, onDrop, color, childr
     <span class="nav-ic" style=${color ? `color:${color}` : ''}>${children || html`<${Icon} name=${icon} size=${17} />`}</span>
     <span class="nav-l">${label}</span>
     ${count ? html`<span class=${cx('nav-c', danger && 'danger')}>${count}</span>` : ''}
+    ${dot && html`<span class="nav-dot" title="An AI app is connected"></span>`}
   </a>`;
 }
 
@@ -119,7 +120,8 @@ function Sidebar() {
     <nav>
       ${s.sidebar.filter((x) => x.show).map((x) => html`<${NavItem} key=${x.id} id=${x.id} icon=${SECTIONS[x.id].icon} label=${SECTIONS[x.id].label}
         active=${r.view === x.id || (x.id === 'folders' && r.view === 'folder') || (x.id === 'tags' && r.view === 'tag')}
-        count=${x.id === 'today' ? counts.today : counts[x.id]} danger=${x.id === 'today' && overdue > 0} onDrop=${dropTo[x.id]} />`)}
+        count=${x.id === 'today' ? counts.today : counts[x.id]} danger=${x.id === 'today' && overdue > 0} onDrop=${dropTo[x.id]}
+        dot=${x.id === 'mcp' && S.mcp && S.mcp.status === 'connected'} />`)}
     </nav>
     ${s.sidebarFolders && html`<div class="sb-group">
       <div class="sb-gh"><button type="button" class="sb-gt" onClick=${() => setFO(!foldersOpen)}><${Icon} name=${foldersOpen ? 'chevD' : 'chevR'} size=${13} />Folders</button>
@@ -142,6 +144,22 @@ function Sidebar() {
         <span class="nav-ic"><${Icon} name="download" size=${17} /></span><span class="nav-l">Install JamDay</span></button>`}
     </div>
   </aside>`;
+}
+
+/** Phone-sized screens get a bottom tab bar (the sidebar is still one tap away under “More”). */
+function BottomNav() {
+  const v = S.ui.route.view;
+  const T = D.today();
+  const todayCount = tasks().filter((t) => isTodayTask(t, T) && !t.parentId).length;
+  const item = (id, icon, label, badge) => html`<a href=${'#/' + id} class=${cx('bn-i', v === id && 'on')} aria-current=${v === id ? 'page' : undefined}>
+    <span class="bn-ic"><${Icon} name=${icon} size=${20} /></span><span>${label}</span>${badge ? html`<span class="bn-badge">${badge}</span>` : ''}</a>`;
+  return html`<nav class="bottom-nav" aria-label="Main">
+    ${item('today', 'sun', 'Today', todayCount)}
+    ${item('upcoming', 'upcoming', 'Upcoming')}
+    ${item('calendar', 'calendar', 'Calendar')}
+    ${item('notes', 'notes', 'Notes')}
+    <button type="button" class=${cx('bn-i', S.ui.sidebarOpen && 'on')} onClick=${() => setUI({ sidebarOpen: true })}><span class="bn-ic"><${Icon} name="menu" size=${20} /></span><span>More</span></button>
+  </nav>`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -276,7 +294,7 @@ export function App() {
   useEffect(() => {
     if (ready && !S.settings.onboarded) setTimeout(showWelcome, 300);
   }, [ready]);
-  if (!S.ready) return html`<div class="boot"><span class="brand-logo"><${Icon} name="logo" size=${44} /></span></div>`;
+  if (!S.ready) return html`<div class="boot"><span class="brand-logo"><${Icon} name="logo" size=${52} /></span><b>JamDay</b></div>`;
   const detailItem = S.ui.detail ? findEvent(S.ui.detail.id) : null;
   if (S.ui.detail && !detailItem) setTimeout(closeDetail, 0);
   return html`<div class=${cx('app', S.settings.sidebarCollapsed && 'sb-collapsed', S.ui.sidebarOpen && 'sb-open', detailItem && 'has-detail')}>
@@ -290,6 +308,8 @@ export function App() {
       <aside class="drawer" aria-label="Details">
         ${detailItem.type === 'task' ? html`<${TaskDetail} t=${detailItem} />` : html`<${EventDetail} e=${detailItem} />`}
       </aside>`}
+    <${BottomNav} />
+    <button type="button" class="fab" aria-label="Search or create" onClick=${() => openLauncher()}><${Icon} name="plus" size=${26} /></button>
     <${QuickPanel} />
     <${Launcher} />
     <${ShortcutsHelp} />

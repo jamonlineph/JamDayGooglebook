@@ -351,6 +351,31 @@ function Agenda({ date }) {
   </button>`)}</div>`;
 }
 
+function DayHero({ done, left, overdue, events, habitsLeft, greet }) {
+  const total = done + left;
+  const pct = total ? Math.round((done / total) * 100) : 100;
+  const r = 28, c = 2 * Math.PI * r;
+  const title = !total ? 'A clear day ahead' : !left ? 'All done for today 🎉' : `${done} of ${total} done`;
+  return html`<section class="day-hero" aria-label="Today’s progress">
+    <div class="ring" role="img" aria-label=${pct + '% done'}>
+      <svg viewBox="0 0 68 68" width="100%" height="100%">
+        <circle cx="34" cy="34" r=${r} fill="none" stroke="rgba(255,255,255,.22)" stroke-width="7" />
+        <circle cx="34" cy="34" r=${r} fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"
+          stroke-dasharray=${c} stroke-dashoffset=${c * (1 - pct / 100)} style="transition: stroke-dashoffset .6s ease" />
+      </svg><b>${pct}%</b>
+    </div>
+    <div class="day-hero-t">
+      <h2>${title}</h2>
+      <p>${greet}${left ? ` — ${left} to go` : total ? ' — nice work' : ''}</p>
+      <div class="hero-stats">
+        <span class="hero-stat"><${Icon} name="calendar" size=${13} />${events} event${events === 1 ? '' : 's'}</span>
+        ${habitsLeft > 0 && html`<span class="hero-stat"><${Icon} name="flame" size=${13} />${habitsLeft} habit${habitsLeft === 1 ? '' : 's'} to keep</span>`}
+        ${overdue > 0 && html`<span class="hero-stat warn"><${Icon} name="flag" size=${13} />${overdue} overdue</span>`}
+      </div>
+    </div>
+  </section>`;
+}
+
 export function TodayView() {
   const today = T();
   const all = tasks();
@@ -364,8 +389,10 @@ export function TodayView() {
   const greet = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
   const habitsToday = all.filter((t) => t.repeat && !isDone(t) && taskDate(t) === today).length;
   return html`<div class="view">
-    <${ViewHeader} icon="sun" iconColor="var(--warn)" title="Today" subtitle=${`${greet} · ${D.fmtDate(today, { weekday: true, long: true })}`} />
+    <${ViewHeader} icon="sun" iconColor="var(--warn)" title="Today" subtitle=${D.fmtDate(today, { weekday: true, long: true })} />
     <div class="view-body narrow">
+      <${DayHero} done=${doneToday.length} left=${overdue.length + todays.length} overdue=${overdue.length} events=${eventsOn(today).length}
+        habitsLeft=${habitsToday} greet=${greet} />
       <${Agenda} date=${today} />
       <${QuickAdd} id="quick-add" defaults=${{ when: { kind: 'day', date: today } }} placeholder="Add a task for today…" />
       ${overdue.length > 0 && html`<${Section} title="Overdue" count=${overdue.length} tone="danger"
