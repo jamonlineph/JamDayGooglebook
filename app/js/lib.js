@@ -11,7 +11,7 @@ export {
   useState, useEffect, useRef, useMemo, useCallback, useLayoutEffect, useReducer,
 };
 
-export const APP_VERSION = '1.0.0';
+export const APP_VERSION = '1.1.0';
 
 export function uid(prefix = '') {
   const r = (crypto.getRandomValues ? crypto.getRandomValues(new Uint32Array(2)) : [Math.random() * 1e9, Math.random() * 1e9]);

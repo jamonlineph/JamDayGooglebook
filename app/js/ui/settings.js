@@ -22,7 +22,7 @@ export const GLASS = { '': 'None', aurora: 'Aurora', sunset: 'Sunset', midnight:
 const SECTIONS_NAV = [
   ['general', 'General', 'settings'], ['appearance', 'Appearance', 'palette'], ['sidebar', 'Sidebar', 'sidebar'],
   ['notifications', 'Notifications', 'bell'], ['shortcuts', 'Shortcuts & panel', 'keyboard'], ['integrations', 'Integrations & sync', 'cloud'],
-  ['ai', 'AI', 'sparkles'], ['data', 'Data & import', 'download'], ['about', 'About & privacy', 'info'],
+  ['ai', 'AI & MCP', 'plug'], ['data', 'Data & import', 'download'], ['about', 'About & privacy', 'info'],
 ];
 
 const Row = ({ label, hint, children }) => html`<div class="set-row"><div class="set-l"><span>${label}</span>${hint && html`<small>${hint}</small>`}</div><div class="set-v">${children}</div></div>`;
@@ -182,12 +182,16 @@ export async function importFlow() {
 }
 
 function AISettings() {
-  const ai = S.settings.ai;
   const [local, setLocal] = useState(null);
   useEffect(() => { AI.localAIStatus().then(setLocal); }, []);
-  const P = AI.PROVIDERS[ai.provider];
-  const label = (s) => ({ available: 'Ready', downloadable: 'Available (downloads on first use)', downloading: 'Downloading…', unavailable: 'Not available on this device', unsupported: 'Not supported in this browser' }[s] || s);
+  const label = (s) => ({ available: 'Ready', downloadable: 'Available (downloads on first use)', downloading: 'Downloading…', unavailable: 'Not available on this device', unsupported: 'Not supported here' }[s] || s);
+  const st = S.mcp || { status: 'off' };
   return html`
+    <div class="int-card">
+      <div class="int-h"><span class="int-logo"><${Icon} name="plug" size=${18} /></span><div><b>MCP — connect AI apps</b><div class="muted small">Let Claude, Cursor, VS Code and other MCP apps read and update your JamDay through a small connector on this device.</div></div>
+        <span class="grow"></span><span class=${cx('pill sm', st.status === 'connected' && 'on')}>${{ off: 'Off', connecting: 'Connecting', waiting: 'Waiting', connected: 'Connected' }[st.status] || 'Off'}</span></div>
+      <div class="row"><${Btn} kind="primary" icon="plug" label="Set up MCP" onClick=${() => navigate('mcp')} /></div>
+    </div>
     <div class="int-card">
       <div class="int-h"><span class="int-logo"><${Icon} name="wand" size=${18} /></span><div><b>On-device AI</b><div class="muted small">Rewrite & summarize with Chrome’s built-in model (Gemini Nano). Runs locally — nothing leaves your device.</div></div></div>
       ${local ? html`<div class="kbd-list">
@@ -195,29 +199,7 @@ function AISettings() {
         <div class="kbd-row"><span>Rewriter</span><span class=${cx('pill sm', local.rewriter === 'available' && 'on')}>${label(local.rewriter)}</span></div>
         <div class="kbd-row"><span>Prompt API</span><span class=${cx('pill sm', local.prompt === 'available' && 'on')}>${label(local.prompt)}</span></div>
       </div>` : html`<span class="muted small">Checking…</span>`}
-      <p class="muted small">Use it from the ✨ button when you select text in a note, or “Summarize” on any note. If on-device AI isn’t available, JamDay can fall back to your assistant provider below (it tells you when it does).</p>
-    </div>
-    <div class="int-card">
-      <div class="int-h"><span class="int-logo"><${Icon} name="sparkles" size=${18} /></span><div><b>AI assistant</b><div class="muted small">Optional and off by default · bring your own API key · runs only when you send a message</div></div></div>
-      <${Switch} label="Turn on the assistant" checked=${ai.enabled} onChange=${(v) => setSetting('ai.enabled', v)} />
-      <div class="form-grid">
-        <label>Provider</label>
-        <select class="input" value=${ai.provider} onChange=${(e) => setSetting('ai.provider', e.target.value)}>
-          ${Object.entries(AI.PROVIDERS).map(([k, p]) => html`<option value=${k}>${p.name} (${p.vendor})</option>`)}</select>
-        <label>${P.vendor} API key</label>
-        <div class="row"><input class="input grow" type="password" autocomplete="off" placeholder=${P.keyHint} value=${(ai.keys || {})[ai.provider] || ''}
-          onInput=${(e) => setSetting('ai.keys', { ...(ai.keys || {}), [ai.provider]: e.target.value.trim() })} />
-          <a class="btn" href=${P.keyUrl} target="_blank" rel="noopener"><${Icon} name="external" size=${14} />Get a key</a></div>
-        <label>Auto AI</label>
-        <${Switch} label="Pick a fast or a capable model per message" checked=${ai.auto} onChange=${(v) => setSetting('ai.auto', v)} />
-        ${!ai.auto && html`<label>Model</label><${Segmented} size="sm" value=${ai.mode} onChange=${(v) => setSetting('ai.mode', v)} options=${[{ v: 'fast', label: 'Fast' }, { v: 'capable', label: 'Capable' }]} />`}
-        <label>Fast model</label>
-        <input class="input" placeholder=${P.fast} value=${((ai.models || {})[ai.provider] || {}).fast || ''} onInput=${(e) => setSetting('ai.models', { ...(ai.models || {}), [ai.provider]: { ...((ai.models || {})[ai.provider] || {}), fast: e.target.value } })} />
-        <label>Capable model</label>
-        <input class="input" placeholder=${P.capable} value=${((ai.models || {})[ai.provider] || {}).capable || ''} onInput=${(e) => setSetting('ai.models', { ...(ai.models || {}), [ai.provider]: { ...((ai.models || {})[ai.provider] || {}), capable: e.target.value } })} />
-      </div>
-      <p class="muted small"><${Icon} name="lock" size=${13} /> Your key is stored only on this device and is never exported. When you send a message, the items you choose to share (tasks, calendar — including Google events — and notes) go to ${P.vendor}. Change what’s shared from the assistant’s composer.</p>
-      ${ai.enabled && html`<${Btn} icon="sparkles" label="Open the assistant" onClick=${() => navigate('assistant')} />`}
+      <p class="muted small">Use it from the ✨ button when you select text in a note, or “Summarize” on any note.</p>
     </div>`;
 }
 
@@ -269,7 +251,7 @@ function About() {
     <ul class="privacy-list">
       <li><${Icon} name="lock" size=${15} /> No account. Everything is stored in a local database on this device.</li>
       <li><${Icon} name="eye" size=${15} /> No analytics, telemetry, crash reports or location data.</li>
-      <li><${Icon} name="globe" size=${15} /> Network is used only for: loading app updates, the optional Google connection (Calendar / Drive), the optional AI assistant, and on-demand import helpers (Excel / PDF readers).</li>
+      <li><${Icon} name="globe" size=${15} /> Network is used only for: loading app updates, the optional Google connection (Calendar / Drive), on-demand import helpers (Excel / PDF readers), and — only if you turn on MCP — a local connection to the JamDay connector on this device.</li>
       <li><${Icon} name="cloud" size=${15} /> Google tokens and Google events live in memory only and are never saved to the database.</li>
     </ul>
     <div class="btn-row"><a class="btn" href="../updates.html" target="_blank" rel="noopener">What’s new</a><a class="btn" href="../docs.html" target="_blank" rel="noopener">Help & docs</a><a class="btn" href="../privacy.html" target="_blank" rel="noopener">Privacy policy</a></div>`;

@@ -13,7 +13,7 @@ const STEPS = [
   { sel: '[data-nav="calendar"]', title: 'Calendar', text: 'Day, 2/3/4-day, week and month views. Drag to create, move or resize events. Connect Google Calendar from Settings.', sidebar: true },
   { sel: '[data-nav="notes"]', title: 'Notes that do more', text: 'Headings, to-dos, tables, images and covers. Type / for commands (even mid-line) and @ to link tasks, events or other notes.', sidebar: true },
   { sel: '[data-nav="habits"]', title: 'Habits with streaks', text: 'Any task can repeat. Keep the 🔥 streak going — the flame shows in Today, Upcoming and the calendar.', sidebar: true },
-  { sel: '.sb-settings', title: 'Make it yours', text: 'Themes (including glass), shortcuts, reminders, Google sync, on-device AI and the optional assistant are in Settings.', sidebar: true },
+  { sel: '.sb-settings', title: 'Make it yours', text: 'Themes (including glass), shortcuts, reminders, Google sync, and on-device AI are in Settings. Connect AI apps like Claude from MCP in the sidebar.', sidebar: true },
 ];
 
 export function startTour() { S.ui.tour = { i: 0 }; emit(); }

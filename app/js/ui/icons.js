@@ -66,6 +66,7 @@ const P = {
   undo: '<path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
   star: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/>',
   dock: '<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 15.5h18"/>',
+  plug: '<path d="M9 3v5M15 3v5"/><path d="M6 8h12v3a6 6 0 0 1-12 0z"/><path d="M12 17v4"/>',
   bolt: '<path d="M13 2.5L4.5 13.5H12l-1 8 8.5-11H12z"/>',
   text: '<path d="M5 6.5V5h14v1.5M12 5v14M9 19h6"/>',
   bullet: '<circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>',

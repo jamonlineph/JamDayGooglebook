@@ -18,7 +18,7 @@ export const SECTIONS = {
   habits: { label: 'Habits', icon: 'flame' },
   folders: { label: 'Folders', icon: 'folder' },
   tags: { label: 'Tags', icon: 'tag' },
-  assistant: { label: 'Assistant', icon: 'sparkles' },
+  mcp: { label: 'MCP', icon: 'plug' },
 };
 
 export const PRIORITIES = [
@@ -62,10 +62,7 @@ export const DEFAULT_SETTINGS = {
   },
   shortcuts: { launcher: 'alt+space', panel: 'ctrl+alt+space' },
   panel: { style: 'dropdown', edge: false, edgeSide: 'right', x: null, y: null, tab: 'today' },
-  ai: {
-    enabled: false, provider: 'claude', auto: true, mode: 'capable', keys: {}, models: {},
-    includeTasks: true, includeEvents: true, includeNotes: true,
-  },
+  mcp: { enabled: false, url: 'ws://127.0.0.1:41823', token: '', access: 'write', notify: true },
   google: { clientId: '', twoWay: false, calendars: [], drive: false, lastSync: null, autoConnect: false },
   onboarded: false,
   tourDone: false,
@@ -158,6 +155,8 @@ export async function boot() {
   const known = new Set(S.settings.sidebar.map((s) => s.id));
   for (const id of Object.keys(SECTIONS)) if (!known.has(id)) S.settings.sidebar.push({ id, show: true });
   S.settings.sidebar = S.settings.sidebar.filter((s) => SECTIONS[s.id]);
+  // The old built-in assistant stored API keys here; MCP replaced it, so drop them.
+  if (S.settings.ai) { delete S.settings.ai; saveSettings(); }
   S.tombstones = tomb || {};
   S.ui.route = parseHash();
   S.ui.calendar.view = S.settings.calendarView;

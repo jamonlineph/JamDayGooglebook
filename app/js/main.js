@@ -3,6 +3,7 @@ import { html, render, android } from './lib.js';
 import { S, boot, emit, openItem, toast } from './store.js';
 import { App, applyTheme } from './ui/app.js';
 import { startScheduler } from './notify.js';
+import { startMCP } from './mcp.js';
 
 applyTheme();
 render(html`<${App} />`, document.getElementById('app'));
@@ -10,6 +11,7 @@ render(html`<${App} />`, document.getElementById('app'));
 boot().then(() => {
   applyTheme();
   startScheduler();
+  if (S.settings.mcp && S.settings.mcp.enabled) startMCP();
 }).catch((e) => {
   console.error(e);
   document.getElementById('app').innerHTML = `<div class="boot-error"><h2>JamDay couldn’t open its local database</h2><p>${String(e && e.message || e)}</p><p>If you’re in a private/guest window, storage may be disabled. Try a normal window.</p></div>`;

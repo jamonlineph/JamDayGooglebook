@@ -1,15 +1,15 @@
 // JamDay service worker: offline app shell + notification clicks.
 // Bump VERSION when shipping changes so installed apps pick up the new files.
-const VERSION = 'jamday-v1.0.0';
+const VERSION = 'jamday-v1.1.0';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest', 'css/app.css',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png', 'icons/badge-96.png',
   'vendor/preact.mjs', 'vendor/hooks.mjs', 'vendor/htm.mjs',
   'js/main.js', 'js/lib.js', 'js/dates.js', 'js/db.js', 'js/store.js', 'js/tokens.js', 'js/md.js', 'js/notify.js',
-  'js/io.js', 'js/ai.js', 'js/google.js', 'js/demo.js',
+  'js/io.js', 'js/ai.js', 'js/google.js', 'js/demo.js', 'js/mcp.js', 'mcp/jamday-mcp.mjs', 'fonts/InterVariable.woff2',
   'js/ui/app.js', 'js/ui/icons.js', 'js/ui/common.js', 'js/ui/editor.js', 'js/ui/attachments.js', 'js/ui/tasks.js',
   'js/ui/calendar.js', 'js/ui/notes.js', 'js/ui/collections.js', 'js/ui/launcher.js', 'js/ui/panel.js',
-  'js/ui/assistant.js', 'js/ui/settings.js', 'js/ui/tour.js',
+  'js/ui/mcp.js', 'js/ui/settings.js', 'js/ui/tour.js',
 ];
 
 self.addEventListener('install', (e) => {

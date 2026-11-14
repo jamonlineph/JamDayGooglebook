@@ -13,7 +13,7 @@ import { NotesView } from './notes.js';
 import { FoldersView, FolderPage, TagsView, TagPage, TrashView, folderMenu } from './collections.js';
 import { Launcher, openLauncher, closeLauncher, registerCommands } from './launcher.js';
 import { QuickPanel, togglePanel } from './panel.js';
-import { AssistantView } from './assistant.js';
+import { MCPView } from './mcp.js';
 import { SettingsView, ACCENTS, SHORTCUTS, importFlow } from './settings.js';
 import { Tour, startTour, showWelcome } from './tour.js';
 import { loadDemo } from '../demo.js';
@@ -60,7 +60,7 @@ registerCommands(() => {
     { icon: 'sidebar', label: 'Toggle sidebar', hint: '[', run: () => { setSetting('sidebarCollapsed', !S.settings.sidebarCollapsed); close(); } },
     { icon: 'moon', label: S.settings.theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme', kw: 'theme appearance dark light', run: () => { setSetting('theme', document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'); close(); } },
     { icon: 'palette', label: S.settings.glass ? 'Turn off glass theme' : 'Use a glass theme', kw: 'theme glass aurora', run: () => { setSetting('glass', S.settings.glass ? '' : 'aurora'); close(); } },
-    { icon: 'sparkles', label: 'Ask the AI assistant', kw: 'chat ai claude gpt gemini grok', run: go('assistant') },
+    { icon: 'plug', label: 'Connect AI apps (MCP)', kw: 'mcp ai claude cursor connector', run: go('mcp') },
     { icon: 'keyboard', label: 'Keyboard shortcuts', hint: '?', run: () => { close(); setUI({ shortcutsHelp: true }); } },
     { icon: 'info', label: 'Start the feature tour', kw: 'help onboarding', run: () => { close(); navigate('today'); setTimeout(startTour, 200); } },
     { icon: 'download', label: 'Export a backup (.json)', kw: 'backup save export', run: () => { IO.exportJSON(); close(); } },
@@ -204,7 +204,7 @@ function onGlobalKey(e) {
   const k = e.key;
   if (gPending && Date.now() - gPending < 1200) {
     gPending = 0;
-    const map = { t: 'today', i: 'inbox', u: 'upcoming', c: 'calendar', n: 'notes', h: 'habits', k: 'tasks', e: 'events', f: 'folders', s: 'settings', a: 'assistant' };
+    const map = { t: 'today', i: 'inbox', u: 'upcoming', c: 'calendar', n: 'notes', h: 'habits', k: 'tasks', e: 'events', f: 'folders', s: 'settings', a: 'mcp' };
     if (map[k]) { e.preventDefault(); navigate(map[k]); }
     return;
   }
@@ -252,7 +252,7 @@ function Main() {
     case 'tags': return html`<${TagsView} />`;
     case 'tag': return html`<${TagPage} key=${r.id} id=${r.id} />`;
     case 'trash': return html`<${TrashView} />`;
-    case 'assistant': return html`<${AssistantView} />`;
+    case 'mcp': return html`<${MCPView} />`;
     case 'settings': return html`<${SettingsView} section=${r.id} />`;
     case 'open': if (r.id) setTimeout(() => { navigate(S.settings.startView); openItem(r.id); }, 0); return null;
     default: return html`<${TodayView} />`;
