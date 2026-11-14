@@ -33,7 +33,7 @@
 <ul>
 <li><strong>App updates:</strong> loading the app files from this website.</li>
 <li><strong>Google connection (optional):</strong> if you connect Google, JamDay talks directly to Google’s Calendar and Drive APIs using your own OAuth client. Access tokens are kept in memory only. Google Calendar events are held in memory and never written to the device database. Two-way sync only creates, edits and deletes events you created in JamDay. Drive sync stores one file in Drive’s hidden app-data folder.</li>
-<li><strong>AI assistant (optional, off by default):</strong> when you send a message, your message and the data you chose to share (tasks, calendar including Google events, notes) are sent directly to the provider you picked (Anthropic, OpenAI, Google or xAI) using your API key. Their privacy policies apply to that data. On-device AI (Chrome’s built-in model) runs locally.</li>
+<li><strong>MCP (optional, off by default):</strong> if you turn it on, JamDay connects to the JamDay connector on your own device (localhost) and answers requests from the AI app you set up. JamDay itself sends nothing to the internet; what your AI app does with the answers is governed by that app’s own privacy policy. On-device AI (Chrome’s built-in model) runs locally.</li>
 <li><strong>Import helpers:</strong> importing Excel or PDF files downloads a reader library from a public CDN (cdnjs). Your files are read on your device and are not uploaded.</li>
 </ul>
 <h2>Purchases</h2>

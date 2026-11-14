@@ -39,7 +39,7 @@
     <div class="card"><div class="ic">🗂️</div><h3>Folders &amp; tags</h3><p>Folders hold notes, tasks and events together. Tags get their own pages, colours and icons.</p></div>
     <div class="card"><div class="ic">⚡</div><h3>Quick Launcher</h3><p>Press <span class="kbd">Alt</span> <span class="kbd">Space</span> to search everything and create anything with quick tokens.</p></div>
     <div class="card"><div class="ic">🪟</div><h3>Quick panel</h3><p>A companion panel for Today, Calendar, Tasks, Events and Notes — as a dropdown, floating window or docked to an edge.</p></div>
-    <div class="card"><div class="ic">✨</div><h3>AI, your way</h3><p>On-device rewrite and summarize, plus an optional assistant with your own key. Off by default.</p></div>
+    <div class="card"><div class="ic">🔌</div><h3>Works with your AI (MCP)</h3><p>Connect Claude, Cursor or any MCP app to plan your day and update tasks, notes and events — locally, with Undo.</p></div>
     <div class="card"><div class="ic">🔒</div><h3>Local &amp; private</h3><p>No account and no tracking. Optional sync through your own Google Drive.</p></div>
   </div>
 </div></section>
@@ -99,7 +99,20 @@
   <div class="f-img"><img src="site/img/launcher.jpg" alt="The Quick Launcher creating a task and an event from one line" loading="lazy" width="2160" height="1350"></div>
 </div></section>
 
-<section><div class="wrap feature">
+<section id="mcp"><div class="wrap feature">
+  <div class="f-text"><span class="eyebrow">MCP</span><h2>Bring your favourite AI</h2>
+    <p class="muted">JamDay speaks the Model Context Protocol, so AI apps you already use can work with your plans.</p>
+    <ul class="checks">
+      <li>Works with <b>Claude Desktop, Claude Code, Cursor, VS Code</b> and any MCP client</li>
+      <li>Ask “What’s on my plate today?” or “Plan my week” — it reads your tasks, notes, calendar and habits</li>
+      <li>It can create and update tasks, events and notes in plain language (“next fri 9am”)</li>
+      <li><b>Read-only or read &amp; write</b> — you decide; every change shows a notice with Undo</li>
+      <li>Runs on your device through a tiny connector — no account, no cloud relay</li>
+    </ul></div>
+  <div class="f-img"><img src="site/img/mcp.jpg" alt="The MCP page in JamDay, connected and showing recent activity" loading="lazy" width="2160" height="1350"></div>
+</div></section>
+
+<section class="alt"><div class="wrap feature rev">
   <div class="f-text"><span class="eyebrow">Make it yours</span><h2>Light, dark — or glass</h2>
     <p class="muted">Pick a theme and an accent colour, reorder the sidebar, and set your own shortcuts.</p>
     <ul class="checks">
@@ -111,7 +124,7 @@
   <div class="f-img"><img src="site/img/board-dark.jpg" alt="Kanban board in a dark glass theme" loading="lazy" width="2160" height="1350"></div>
 </div></section>
 
-<section id="pricing" class="alt"><div class="wrap center">
+<section id="pricing"><div class="wrap center">
   <div class="intro"><span class="eyebrow">Pricing</span><h2>Pay once. Keep it forever.</h2><p class="muted">No subscription. Try everything first, then buy when you’re ready.</p></div>
   <div class="price-card">
     <span class="offer">Limited offer for early users</span>
@@ -127,7 +140,7 @@
   </div>
 </div></section>
 
-<section id="faq"><div class="wrap">
+<section id="faq" class="alt"><div class="wrap">
   <div class="intro center"><span class="eyebrow">FAQ</span><h2>Questions, answered</h2></div>
   <div class="faq">
 <details><summary>What is JamDay?</summary><p>JamDay keeps your tasks, habits, notes and calendar together in one fast app. It is built for Googlebooks and Chromebooks: you install it straight from Chrome, it opens in its own window, and it keeps working offline.</p></details>
@@ -135,7 +148,7 @@
 <details><summary>Where is my data stored? Is it private?</summary><p>Everything is stored in a local database on your device. There is no account, and JamDay collects no analytics, telemetry, crash reports or location data.</p></details>
 <details><summary>Does it sync across my devices?</summary><p>Yes, if you want it to. Turn on Google Drive sync in Settings ▸ Integrations: JamDay keeps one private file in Drive’s hidden app-data folder that only JamDay can read. You can also export and import full backups at any time.</p></details>
 <details><summary>Does it work with Google Calendar or Outlook?</summary><p>You can connect Google Calendar directly. JamDay reads about two weeks back and three months ahead. Optional two-way sync creates, edits and deletes only the events you make in JamDay, and can add Google Meet links. Outlook and other calendars can be brought in with an .ics calendar file.</p></details>
-<details><summary>What can the AI do, and is it private?</summary><p>Rewrite and summarize run on-device with Chrome’s built-in AI where it’s available. The AI assistant is optional and off by default: you use your own Claude, ChatGPT, Gemini or Grok key, and it only runs when you send a message. The items you choose to share go to the provider you picked.</p></details>
+<details><summary>Can I use JamDay with Claude or other AI apps?</summary><p>Yes — through MCP. Turn on “Allow MCP clients” in JamDay, add the small JamDay connector to Claude Desktop, Claude Code, Cursor, VS Code or any MCP app, and it can read your day and create or update tasks, notes and events. It runs on your device, you choose read-only or read &amp; write, and every change shows a notice with Undo. Rewrite and summarize also run on-device with Chrome’s built-in AI where available.</p></details>
 <details><summary>How much does it cost?</summary><p>A one-time payment of $19 (limited early price, normally $39). You get lifetime access and lifetime updates, with every feature unlocked.</p></details>
 <details><summary>How many devices can I use it on?</summary><p>One license is for one person on up to 2 devices.</p></details>
 <details><summary>Is there a free trial?</summary><p>Yes. Open JamDay in your browser and try every feature before you buy. Purchases also come with a 14-day money-back guarantee.</p></details>
@@ -143,7 +156,7 @@
   </div>
 </div></section>
 
-<section id="download" class="alt"><div class="wrap center">
+<section id="download"><div class="wrap center">
   <div class="intro"><span class="eyebrow">Download</span><h2>Install JamDay in under a minute</h2><p class="muted">No store, no account. JamDay installs straight from Chrome.</p></div>
   <div class="steps">
     <div class="card"><h3>Open JamDay</h3><p>Open <a href="app/">JamDay</a> in Chrome on your Googlebook or Chromebook.</p></div>

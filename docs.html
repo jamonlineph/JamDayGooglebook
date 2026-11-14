@@ -27,7 +27,7 @@
 <nav class="toc" aria-label="Guides">
   <a href="#getting-started">1. Getting started</a><a href="#tasks">2. Tasks &amp; quick tokens</a><a href="#habits">3. Habits &amp; repeating tasks</a>
   <a href="#calendar">4. Calendar &amp; Google</a><a href="#notes">5. Notes &amp; the editor</a><a href="#organize">6. Folders, tags &amp; search</a>
-  <a href="#panel">7. Quick panel &amp; shortcuts</a><a href="#data">8. Sync, backups, AI &amp; privacy</a>
+  <a href="#panel">7. Quick panel &amp; shortcuts</a><a href="#data">8. Sync, backups &amp; privacy</a><a href="#mcp">9. MCP &amp; AI apps</a>
 </nav>
 <article class="prose">
 <h2 id="getting-started">1. Getting started</h2>
@@ -77,12 +77,21 @@
 <tr><td>Toggle sidebar</td><td><code>[</code></td></tr><tr><td>All shortcuts</td><td><code>?</code></td></tr></table>
 <p>Change the launcher and panel shortcuts in Settings ▸ Shortcuts &amp; panel.</p>
 
-<h2 id="data">8. Sync, backups, AI &amp; privacy</h2>
+<h2 id="data">8. Sync, backups &amp; privacy</h2>
 <p><strong>Your data</strong> lives in a local database in your browser profile on this device. Export a full backup (.json), your tasks (.csv) or all notes (.md) from Settings ▸ Data &amp; import, where you can also import backups, CSV and Excel files (for example from Todoist or Linear), Markdown, PDF and .ics files.</p>
 <p><strong>Sync</strong> is optional: turn on Google Drive sync to keep devices in step through one private file in Drive’s app-data folder. Attachments stay on the device where you added them.</p>
 <p><strong>Reminders</strong> are local notifications, shown while JamDay is open. Install it and keep it on your shelf for the most reliable alerts.</p>
-<p><strong>AI:</strong> rewrite and summarize run on-device with Chrome’s built-in AI where your device supports it. The assistant is optional and off by default. It uses your own Claude, ChatGPT, Gemini or Grok API key, runs only when you send a message, and shows every change for you to confirm. Choose what it can see (tasks, calendar, notes) from the composer.</p>
+<p><strong>On-device AI:</strong> rewrite and summarize run on-device with Chrome’s built-in AI where your device supports it.</p>
 <p>Read the full <a href="privacy.html">privacy policy</a>.</p>
+
+<h2 id="mcp">9. MCP &amp; AI apps</h2>
+<p>JamDay works with AI apps that support the <strong>Model Context Protocol (MCP)</strong>, such as Claude Desktop, Claude Code, Cursor and VS Code. They talk to a small <strong>JamDay connector</strong> that runs on your device, and the connector talks to JamDay. Nothing goes through a server.</p>
+<ol><li>Open <strong>MCP</strong> in the sidebar and turn on <strong>Allow MCP clients</strong>. Choose <em>Read only</em> or <em>Read &amp; make changes</em>.</li>
+<li>Click <strong>Download jamday-mcp.mjs</strong>. It needs <a href="https://nodejs.org">Node.js</a> 18 or newer.</li>
+<li>Copy the setup snippet for your AI app (it already includes your token) and paste it where the app keeps MCP servers. For Claude Code it’s one command: <code>claude mcp add jamday --env JAMDAY_TOKEN=… -- node /path/to/jamday-mcp.mjs</code></li>
+<li>Keep JamDay open. The MCP page shows <em>Connected</em> and lists every request.</li></ol>
+<p>AI apps can get today’s overview, search, list tasks, events, notes, habits, folders and tags, and — if you allow changes — create, update, complete and delete (to Trash) tasks, events and notes. Each change shows a notice with <strong>Undo</strong>.</p>
+<p><strong>On a Chromebook or Googlebook</strong> with your AI app in the Linux environment, turn on port forwarding for port 41823 in ChromeOS Settings ▸ About ChromeOS ▸ Developers ▸ Linux ▸ Port forwarding.</p>
 </article></div></div></div>
 
 </main>
